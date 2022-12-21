@@ -14,11 +14,10 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UserSerializer 
     queryset = User.objects.all()
-    lookup_field = 'pk'
+    lookup_field = 'userId'
 
 class Login(APIView):
     def post(self, request, format = None):
-        permission_classes = (permissions.AllowAny,)
         serializer = LoginSerializer(data = self.request.data, context = {'request':self.request})
         serializer.is_valid(raise_exception = True)
         user = serializer.validated_data['user']
