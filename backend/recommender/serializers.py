@@ -24,7 +24,7 @@ class LoginSerializer(serializers.Serializer):
     )
     def validate(self, attrs):
         username = attrs['username']
-        password = attrs['password']
+        password = attrs['password'].__hash__()
         if username and password:
             user = authenticate(request=self.context.get('request'), username = username, password = password)
             if not user:
