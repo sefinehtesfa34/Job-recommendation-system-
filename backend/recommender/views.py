@@ -7,9 +7,7 @@ from django.contrib.auth import login
 from .serializers import UserSerializer, JobSerializer
 from .models import User, Job 
 from .preprocessor import Preprocessor
-from PyPDF2 import PdfReader 
-import os 
-from time import time 
+from PyPDF2 import PdfReader
 class UserList(APIView):
     def post(self, request, format = None):
         serializer = UserSerializer(data = request.data)
@@ -17,6 +15,11 @@ class UserList(APIView):
             serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+    
+    def get(self, request, format = None):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many = True)
+        return Response(serializer.data)
     
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -62,18 +65,16 @@ class RecommenderView(APIView):
             raise ValueError
         
     def get(self, request, pk, format = None):
-        user = self.get_object(pk)
-        serializer = UserSerializer(user)
-        resume_text = ''
-        pathname = os.getcwd() + serializer.data['resume']
-        reader = PdfReader(pathname)
-        for page in reader.pages:
-            resume_text += page.extract_text()
-        preprocessor = Preprocessor(resume_text)
-        recommended = Job.objects.filter(jobCategory = preprocessor.category)
-        serializer = JobSerializer(recommended, many = True)
-        
-        return Response(serializer.data)
-        
-    
-    
+        try:
+            user = self.get_object(pk)
+            resume = user.resume
+            reader = PdfReader(resume)
+            resume_text = ''
+            for page in reader.pages:
+                resume_text += page.extract_text()
+            preprocessor = Preprocessor(resume_text)
+            recommended = Job.objects.filter(jobCategory = preprocessor.category)
+            serializer = JobSerializer(recommended, many = True)
+            return Response(serializer.data)
+        except:
+            return Response({"response":"Forbidden"}, status = status.HTTP_403_FORBIDDEN)
