@@ -1,4 +1,4 @@
-from .models import User, Job 
+from .models import User, Job
 from rest_framework import serializers 
 from django.contrib.auth import authenticate
 class UserSerializer(serializers.ModelSerializer):
@@ -6,6 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User 
         fields = '__all__'
 class JobSerializer(serializers.ModelSerializer):
+    # userId = serializers.ReadOnlyField(source = 'userId.username')
     class Meta:
         model = Job 
         fields = '__all__'
@@ -35,4 +36,4 @@ class LoginSerializer(serializers.Serializer):
         attrs['user'] = user 
         return attrs 
     
-    
+        

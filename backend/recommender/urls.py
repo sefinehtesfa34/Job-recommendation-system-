@@ -13,4 +13,5 @@ urlpatterns = [
     path('api/v1/job/<int:pk>/', views.JobDetail.as_view(), name = 'job_detail'),
     path('api/v1/token/access/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/v1/recommend/<str:pk>', views.RecommenderView.as_view(), name = 'recommend')
 ]
