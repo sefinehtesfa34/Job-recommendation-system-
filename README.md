@@ -22,7 +22,7 @@ We are building a job recommendation system.
 |Preferred qualifications|False|
 |Job salary              |False    |
 |Job category            |False    |
-|Timestamp               |False    |
+|Timestamp               |default    |
 <br>
 
 # Users schema
@@ -40,4 +40,25 @@ We are building a job recommendation system.
 |Gender                  |False    |
 |Date of Birth           |False    |
 |About                   |False    |
+|Timestamp               |default  |
 
+# UserProfile Schema
+|Attribute               | Required|
+|--------------          |:-------:|
+|UserId                  |True     |
+|Linkedin                |False    |
+|Education               |False    |
+|Certification           |False    |
+|Skills                  |False    |
+|Timestamp               |default  |          
+
+# Client SChema
+|Attribute               | Required|
+|--------------          |:-------:|
+|ClientId                |True     |
+|Email                   |True     |
+|Organization            |False    |
+|HiringManagerName       |False    |
+|CareerSite              |False    |
+|password                |True     |
+|Timestamp               |default  |
