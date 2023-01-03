@@ -14,7 +14,7 @@ We are building a job recommendation system.
 # Jobs schema
 |Attribute               | Required|
 |--------------          |:-------:|
-|userId                  |True     |
+|userId                  |ForeignKey(User)    |
 |Job title               |True     |
 |Job description         |True     |
 |Qualifications          |True     |
@@ -45,11 +45,11 @@ We are building a job recommendation system.
 # UserProfile Schema
 |Attribute               | Required|
 |--------------          |:-------:|
-|UserId                  |True     |
+|UserId                  |ForeignKey(User)     |
 |Linkedin                |False    |
 |Education               |False    |
 |Certification           |False    |
-|Skills                  |False    |
+|Skills                  |ForeignKey(Skill)    |
 |Timestamp               |default  |          
 
 # Client SChema
@@ -62,3 +62,8 @@ We are building a job recommendation system.
 |CareerSite              |False    |
 |password                |True     |
 |Timestamp               |default  |
+# Skill Schema
+|Attribute               | Required|
+|--------------          |:-------:|
+|skillId                 |default  |
+|name                    |False    |
