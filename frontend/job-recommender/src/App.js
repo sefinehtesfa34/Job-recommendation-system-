@@ -1,27 +1,28 @@
 import Header from "./components/Header";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./App.css";
+import axios from "axios";
+import AuthContext, { AuthProvider } from "./context/AuthContext";
+import Home from "./components/Home";
 function App() {
   const body = { username: "sefineh", password: "1234" };
+  const [token, setToken] = useState(null);
+  localStorage.setItem("token", null);
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("/api/v1/token/access/", {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }).then((token) => {
-        return token.json();
-      });
-      console.log(response);
-    };
-    fetchData();
-  });
+    axios.post("/api/v1/token/access/", body).then((response) => {
+      setToken(response.data);
+      localStorage.setItem("token", JSON.stringify(token));
+      console.log(localStorage.getItem("token"));
+    });
+  }, []);
+
   return (
     <>
       <Header />;
+      <AuthProvider>
+        <Home />
+        
+      </AuthProvider>
     </>
   );
 }

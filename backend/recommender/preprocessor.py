@@ -8,6 +8,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier 
 from sklearn.model_selection import train_test_split 
 import pickle
+from sklearn.metrics.pairwise import cosine_similarity
 # nltk.download('stopwords')
 class Preprocessor:
     def __init__(self, description) -> None:
@@ -33,3 +34,12 @@ class Preprocessor:
         vector_form = vectorizer.transform(self.cleaned_text)
         class_type = model.predict(vector_form)
         return hashmap[class_type[0]]
+def similarity(text1, text2):
+    document = [text1, text2]
+    tfidf = TfidfVectorizer()
+    vector = tfidf.fit_transform(document)
+    document_similarity = cosine_similarity(vector)
+    return document_similarity[0][1]
+
+    
+    

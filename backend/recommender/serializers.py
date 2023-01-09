@@ -1,39 +1,21 @@
-from .models import User, Job
+from .models import TalentProfile, CustomeUser, Job, Skill
 from rest_framework import serializers 
-from django.contrib.auth import authenticate
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User 
-        fields = '__all__'
+from django.contrib.auth.hashers import make_password
 class JobSerializer(serializers.ModelSerializer):
-    # userId = serializers.ReadOnlyField(source = 'userId.username')
     class Meta:
         model = Job 
         fields = '__all__'
-        
-class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(
-        label = 'Username',
-        write_only = True
-    )
-    password = serializers.CharField(
-        label = 'Password',
-        style = {'input_type':'password'},
-        trim_whitespace = False, 
-        write_only = True,
-    )
-    def validate(self, attrs):
-        username = attrs['username']
-        password = attrs['password'].__hash__()
-        if username and password:
-            user = authenticate(request=self.context.get('request'), username = username, password = password)
-            if not user:
-                message = 'Access denied: wrong username or password'
-                raise serializers.ValidationError(message, code = 'autherization')
-        else:
-            message = 'Both username and password is required'
-            raise serializers.ValidationError(message, code = 'autherization')
-        attrs['user'] = user 
-        return attrs 
-    
-        
+class TalentProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TalentProfile
+        fields = '__all__'
+class SkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = '__all__'
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomeUser
+        fields = '__all__'
+    def validate_password(self, value: str) -> str:
+        return make_password(value)
