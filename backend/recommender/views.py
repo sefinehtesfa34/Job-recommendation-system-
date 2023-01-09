@@ -1,6 +1,5 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from collections import OrderedDict
 from .serializers import UserSerializer 
 from rest_framework import status, generics
 from rest_framework import permissions 
@@ -10,7 +9,6 @@ from .models import Skill, TalentProfile, CustomeUser, Job
 from .preprocessor import Preprocessor, similarity
 from PyPDF2 import PdfReader
 from rest_framework.pagination import PageNumberPagination
-from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np 
 class UserList(APIView, PageNumberPagination):
     def post(self, request, format = None):    
