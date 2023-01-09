@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LogoutView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -15,5 +17,7 @@ urlpatterns = [
     path('api/v1/profile/<str:userId>/', views.ProfileView.as_view(), name = 'profile'),
     path('api/v1/skill/', views.SkillView.as_view(), name = 'skill'),
     path('api/v1/skill<str:pk>/', views.SkillDetailView.as_view()),
+    path('', TemplateView.as_view(template_name="index.html")),
+    path('logout', LogoutView.as_view()),
     
 ]

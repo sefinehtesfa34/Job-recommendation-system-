@@ -119,8 +119,6 @@ class ProfileView(APIView, PageNumberPagination):
             return self.get_paginated_response(serializer.data)
         except:
             return self.get_paginated_response({"message":ValueError, "status":status.HTTP_403_FORBIDDEN})
-        
-        
 class SkillView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = SkillSerializer
@@ -129,9 +127,3 @@ class SkillDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated, )
     serializer_class = SkillSerializer
     queryset = Skill.objects.all()
-    
-    
-    
-            
-            
-            
