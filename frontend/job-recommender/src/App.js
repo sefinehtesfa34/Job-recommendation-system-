@@ -1,29 +1,25 @@
-import Header from "./components/Header";
-import { useContext, useEffect, useState } from "react";
-import "./App.css";
-import axios from "axios";
-import AuthContext, { AuthProvider } from "./context/AuthContext";
-import Home from "./components/Home";
-function App() {
-  const body = { username: "sefineh", password: "1234" };
-  const [token, setToken] = useState(null);
-  localStorage.setItem("token", null);
-  useEffect(() => {
-    axios.post("/api/v1/token/access/", body).then((response) => {
-      setToken(response.data);
-      localStorage.setItem("token", JSON.stringify(token));
-      console.log(localStorage.getItem("token"));
-    });
-  }, []);
+import logo from './logo.svg';
+import './App.css';
 
+function App() {
   return (
-    <>
-      <Header />;
-      <AuthProvider>
-        <Home />
-        
-      </AuthProvider>
-    </>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
   );
 }
+
 export default App;
