@@ -27,20 +27,17 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
     
 class CustomeUser(AbstractUser):
-    date_joined  = None
     email = models.EmailField(max_length = 100, unique = True)
-    first_name = models.CharField(max_length = 20, blank=True)
-    last_name = models.CharField(max_length = 20, blank = True)
     organization = models.CharField(max_length = 120, blank = True)
     careerSite = models.CharField(max_length = 120, blank = True)
     hiringManagerName = models.CharField(max_length = 120, blank = True)
     password = models.CharField(max_length = 120, blank = False, null = False)
-    title = models.CharField(max_length = 100, blank=True)
+    specialization = models.CharField(max_length = 100, blank=True, default='')
     resume = models.FileField(blank=True)
     residence = models.CharField(max_length = 100, blank = True)
-    DOB = models.DateField(blank = True, default= date.today())
     about = models.TextField(max_length = 1000, blank = True)
     timestamp = models.DateField(default= date.today())
+    role = models.CharField(max_length= 100, default='freelance')
     USERNAME_FIELD ='email'
     REQUIRED_FIELDS = ['password']
     objects = UserManager()
