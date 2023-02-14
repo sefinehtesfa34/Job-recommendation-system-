@@ -64,7 +64,8 @@ class UserDetail(APIView):
         user = CustomeUser.objects.get(pk = userId)
         if user.id != token.payload.get('user_id', ''):
             return Response({"error":"Access denied", 'status':status.HTTP_403_FORBIDDEN})
-        return Response(user)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
     
     def delete(self, request, userId, format = None):
         try:
