@@ -166,5 +166,5 @@ class Search(APIView, PageNumberPagination):
         results = connect.fetchmany(10)
         connection.commit()
         connection.close()
-        
+        return Response(results)
         
