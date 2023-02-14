@@ -1,5 +1,4 @@
 import sqlite3
-import re
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer 
@@ -146,25 +145,35 @@ class SkillDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Skill.objects.all()
 class Search(APIView, PageNumberPagination):
     def get(self, request, format = None):
-        query = request.GET.get('query', '') 
+        query = request.GET.get('query', '')
         connection = sqlite3.Connection('db.sqlite3')
         connect = connection.cursor()
-        connect.execute("""
-                            SELECT json_group_array( json_object(
-                            'jobId', jobId,
-                            'userId', user_id,
-                            'jobTitle', jobTitle,
-                            'responsibility',responsibility ,
-                            'qualification',qualification,
-                            'preferredQualification',preferredQualification,
-                            'jobCategory',jobCategory,
-                            'description',description,
-                            'timestamp',timestamp
-                            )) 
-                            AS json_result FROM (SELECT * FROM recommender_job) WHERE 
-                            jobTitle LIKE ?""", ('%' + query + '%', ))
+        connect.execute('''SELECT jobId,
+                                  user_id,
+                                  jobTitle,
+                                  responsibility,
+                                  qualification,
+                                  preferredQualification,
+                                  jobCategory,
+                                  description,
+                                  timestamp
+                                FROM recommender_job WHERE jobTitle LIKE ?''', ('%'+query+'%',))
+        data = []
         results = connect.fetchmany(10)
+        columns = ["jobId", 
+                   "user_id",
+                   "jobTitle",
+                    "responsibility",
+                    "qualification",
+                    "preferredQualification",
+                    "jobCategory",
+                    "description",
+                    "timestamp"
+                    ]
+        for result in results:
+            data.append(dict(zip(columns, result)))
         connection.commit()
         connection.close()
-        return Response(results)
+        return Response(data)
+        
         
