@@ -1,3 +1,4 @@
+import sqlite3
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer 
@@ -143,9 +144,23 @@ class SkillDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SkillSerializer
     queryset = Skill.objects.all()
 class Search(APIView, PageNumberPagination):
-    def post(self, request, format = None):
-        item = request.data 
-        jobs = Job.objects.filter(title__unaccent_icontains = item)
-        jobs = self.paginate_queryset(jobs)
-        serializer = JobSerializer(jobs, many = True)
-        return self.get_paginated_response(serializer.data)
+    def get(self, request, format = None):
+        query = request.GET.get('query', '') 
+        print(query)
+        connection = sqlite3.Connection('db.sqlite3')
+        connect = connection.cursor()
+        connect.execute('''SELECT jobId,
+                                  jobTitle,
+                                  responsibility,
+                                  qualification,
+                                  preferredQualification,
+                                  jobCategory,
+                                  description,
+                                  timestamp
+                                FROM recommender_job WHERE jobTitle LIKE ?''', ('%'+query+'%',))
+        results = connect.fetchmany(10)
+        connection.commit()
+        connection.close()
+        columns = ["jobId", "userId", "jobTitle", "responsibility", "qualification", "preferredQualification", "jobCategory", "salary", "description", "timestamp"]
+        return Response(results)
+        
