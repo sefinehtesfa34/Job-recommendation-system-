@@ -73,7 +73,8 @@ class UserDetail(APIView):
             JWT_authenticator = JWTAuthentication()
             data, token = JWT_authenticator.authenticate(request)
             user = CustomeUser.objects.get(pk = userId)
-            if user.id != token.payload.get('user_id', ''):
+            superuser = CustomeUser.objects.get(pk = token.payload.get('user_id', ''))
+            if superuser.is_superuser and user.id != token.payload.get('user_id', ''):
                 return Response({'error':'Access denied', 'statusCode':status.HTTP_403_FORBIDDEN})
             user.delete()
             return Response({"message":"Your account has been deleted", 'statusCode':200})
