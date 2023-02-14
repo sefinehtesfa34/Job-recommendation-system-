@@ -1,6 +1,5 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import sqlite3
-import jwt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer 
