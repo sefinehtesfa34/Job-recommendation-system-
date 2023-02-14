@@ -222,16 +222,18 @@ class Search(APIView, PageNumberPagination):
         query = request.GET.get('query', '')
         connection = sqlite3.Connection('db.sqlite3')
         connect = connection.cursor()
-        connect.execute('''SELECT jobId,
-                                  user_id,
-                                  jobTitle,
-                                  responsibility,
-                                  qualification,
-                                  preferredQualification,
-                                  jobCategory,
-                                  description,
-                                  timestamp
-                                FROM recommender_job WHERE jobTitle LIKE ?''', ('%'+query+'%',))
+        connect.execute('''SELECT 
+                                jobId,
+                                user_id,
+                                jobTitle,
+                                responsibility,
+                                qualification,
+                                preferredQualification,
+                                jobCategory,
+                                description,
+                                timestamp
+                                FROM recommender_job WHERE jobTitle LIKE ?''', 
+                                ('%'+query+'%',))
         data = []
         results = connect.fetchmany(10)
         columns = ["jobId", 
