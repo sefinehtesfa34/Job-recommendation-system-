@@ -150,6 +150,7 @@ class Search(APIView, PageNumberPagination):
         connection = sqlite3.Connection('db.sqlite3')
         connect = connection.cursor()
         connect.execute('''SELECT jobId,
+                                  user_id,
                                   jobTitle,
                                   responsibility,
                                   qualification,
