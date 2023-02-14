@@ -84,6 +84,7 @@ class UserDetail(APIView):
             JWT_authenticator = JWTAuthentication()
             data, token = JWT_authenticator.authenticate(request)
             user = CustomeUser.objects.get(pk = userId)
+            request.data['is_active'] = True 
             if user.id != token.payload.get('user_id', ''):
                 return Response({'error':'Access denied', 'statusCode':status.HTTP_403_FORBIDDEN})
             serializer = UserSerializer(user, data = request.data)
