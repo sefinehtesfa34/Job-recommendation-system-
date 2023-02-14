@@ -50,8 +50,8 @@ class Job(models.Model):
     jobTitle = models.CharField(max_length = 50, null = False)
     responsibility = models.TextField(max_length = 10000,  null = False)
     qualification = models.TextField(max_length = 10000, null = False)
-    preferredQualification = models.TextField(max_length = 500)
-    jobCategory = models.CharField(max_length = 100)
+    preferredQualification = models.TextField(max_length = 500, blank = True)
+    jobCategory = models.CharField(max_length = 100, blank=True)
     description = models.TextField(max_length = 10000, default = 'no description')
     timestamp = models.DateField(default= date.today())
     

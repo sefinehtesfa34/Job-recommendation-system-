@@ -36,8 +36,7 @@ def respond(response):
             'specialization':response.get('specialization', ''),
             'resume':response.get('resume', ''),
             'role':response.get('role', ''),
-            'about':response.get('about', ''),
-            'is_active':response.get('is_active', '')
+            'about':response.get('about', '')
             }
     return data 
 class UserList(APIView, PageNumberPagination):
@@ -65,8 +64,8 @@ class UserDetail(APIView):
         user = CustomeUser.objects.get(pk = userId)
         if user.id != token.payload.get('user_id', ''):
             return Response({"error":"Access denied", 'status':status.HTTP_403_FORBIDDEN})
-        
-        return Response()
+        return Response(user)
+    
     def delete(self, request, userId, format = None):
         try:
             JWT_authenticator = JWTAuthentication()
