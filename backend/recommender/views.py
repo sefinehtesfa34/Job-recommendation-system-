@@ -1,4 +1,6 @@
+from rest_framework_simplejwt.authentication import JWTAuthentication
 import sqlite3
+import jwt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer 
@@ -11,6 +13,20 @@ from .preprocessor import Preprocessor, similarity
 from PyPDF2 import PdfReader
 from rest_framework.pagination import PageNumberPagination
 import numpy as np 
+def verify_token(jobId, request):
+    JWT_authenticator = JWTAuthentication()
+    response = JWT_authenticator.authenticate(request)
+    data, token = response 
+    try:
+        job = Job.objects.get(jobId = jobId)
+        serializer = JobSerializer(job)
+        userId = serializer.data['userId']
+        if userId != token.payload.get('user_id', ''):
+            return {'error': 'You are not authorized', 'statusCode':status.HTTP_403_FORBIDDEN}, job 
+        return {'message':"Job has been successfully deleted", 'statusCode':200}, None 
+    except:
+        return {"error":"You are not authorized!", 'statusCode':403}, None 
+        
 def respond(response):
     data = {"id":response['id'],
             'username':response['username'],
@@ -31,7 +47,7 @@ class UserList(APIView, PageNumberPagination):
             data = map(respond, serializer.data)
             return Response(data)
             
-        return Response({"error":serializer.errors, "status":status.HTTP_400_BAD_REQUEST})
+        return Response({"error":serializer.errors, "statusCode":status.HTTP_400_BAD_REQUEST})
     
     def get(self, request, format = None):
         users = CustomeUser.objects.all()[:100]
@@ -55,20 +71,45 @@ class JobList(APIView, PageNumberPagination):
         return self.get_paginated_response(serializer.data)
     
     def post(self, request, format = None):
+        JWT_authenticator = JWTAuthentication()
+        data, token = JWT_authenticator.authenticate(request)  
         description = request.data['description']
         preprocessor = Preprocessor(description = description)
         request.data['jobCategory'] = preprocessor.category
+        request.data['user'] = token.payload.get('user_id', '')
         serializer = JobSerializer(data  = request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response({"error":serializer.errors, "status":status.HTTP_400_BAD_REQUEST})
+        return Response({"error":serializer.errors, "statusCode":status.HTTP_400_BAD_REQUEST})
     
-class JobDetail(generics.RetrieveUpdateDestroyAPIView):
+class JobDetail(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    queryset = Job.objects.all()
-    serializer_class = JobSerializer
-
+    def get(self, request, jobId, format = None):
+        try:
+            job = Job.objects.get(jobId = jobId)
+            serializer = JobSerializer(job)
+            return Response(serializer.data)
+        except:
+            return Response({'error':"Job not found", 'statusCode':st.HTTP_404_NOT_FOUND})
+        
+    def delete(self, request, jobId, format = None):
+        response, job = verify_token(jobId, request)
+        if response['statusCode'] == 200:
+            job = Job.objects.get(jobId = jobId)
+            job.delete()
+            return Response(response)
+        response['statusCode'] = 403
+        return Response(response)
+            
+    def put(self, request, jobId, format = None):
+        response, job = verify_token(jobId, request)
+        if response["statusCode"] == 200:
+            job = Job.objects.get(jobId = jobId)
+            serializer = JobSerializer(job, data = request.data)
+            serializer.save()
+            return Response(serializer.data) 
+        
 class RecommenderView(APIView, PageNumberPagination):
     permission_classes = (permissions.IsAuthenticated,)
     def get_object(self, pk):
@@ -100,7 +141,7 @@ class RecommenderView(APIView, PageNumberPagination):
                 ordered_list.append(hashmap[index])
             return self.get_paginated_response(ordered_list)
         except:
-            return Response({"error":"Something went wrong!", "status":status.HTTP_400_BAD_REQUEST})
+            return Response({"error":"Something went wrong!", "statusCode":status.HTTP_400_BAD_REQUEST})
         
 class ProfileView(APIView, PageNumberPagination):
     permission_classes = (permissions.IsAuthenticated, )
@@ -117,15 +158,15 @@ class ProfileView(APIView, PageNumberPagination):
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
-            return Response({"error":serializer.errors, "status":status.HTTP_400_BAD_REQUEST})
+            return Response({"error":serializer.errors, "statusCode":status.HTTP_400_BAD_REQUEST})
         
     def delete(self, request, pk, format = None):
         try:
             user = TalentProfile.objects.get(pk = pk)
             user.delete()
-            return self.get_paginated_response({"error":"No content", "status":status.HTTP_204_NO_CONTENT})
+            return self.get_paginated_response({"error":"No content", "statusCode":status.HTTP_204_NO_CONTENT})
         except:
-            return self.get_paginated_response({"error":"Bad request", "status":status.HTTP_400_BAD_REQUEST})
+            return self.get_paginated_response({"error":"Bad request", "statusCode":status.HTTP_400_BAD_REQUEST})
         
         
     def get(self, request, pk, format = None):
@@ -134,7 +175,7 @@ class ProfileView(APIView, PageNumberPagination):
             serializer = TalentProfileSerializer(user)
             return self.get_paginated_response(serializer.data)
         except:
-            return self.get_paginated_response({"error":ValueError, "status":status.HTTP_403_FORBIDDEN})
+            return self.get_paginated_response({"error":ValueError, "statusCode":status.HTTP_403_FORBIDDEN})
 class SkillView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = SkillSerializer
