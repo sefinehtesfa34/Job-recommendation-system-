@@ -14,10 +14,10 @@ from PyPDF2 import PdfReader
 from rest_framework.pagination import PageNumberPagination
 import numpy as np 
 def verify_token(jobId, request):
-    JWT_authenticator = JWTAuthentication()
-    response = JWT_authenticator.authenticate(request)
-    data, token = response 
     try:
+        JWT_authenticator = JWTAuthentication()
+        response = JWT_authenticator.authenticate(request)
+        data, token = response 
         job = Job.objects.get(jobId = jobId)
         serializer = JobSerializer(job)
         userId = serializer.data['userId']
@@ -28,6 +28,7 @@ def verify_token(jobId, request):
         return {"error":"You are not authorized!", 'statusCode':403}, None 
         
 def respond(response):
+    
     data = {"id":response['id'],
             'username':response['username'],
             'email':response['email'],
@@ -44,7 +45,7 @@ class UserList(APIView, PageNumberPagination):
         serializer = UserSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
-            data = map(respond, serializer.data)
+            data = respond(serializer.data)
             return Response(data)
             
         return Response({"error":serializer.errors, "statusCode":status.HTTP_400_BAD_REQUEST})
@@ -57,11 +58,43 @@ class UserList(APIView, PageNumberPagination):
         return self.get_paginated_response(data)
 
     
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+class UserDetail(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = UserSerializer 
-    queryset = CustomeUser.objects.all()
-    # lookup_field = 'id'
+    def get(self, request, userId, format = None):
+        JWT_authenticator = JWTAuthentication()
+        data, token = JWT_authenticator.authenticate(request)
+        user = CustomeUser.objects.get(pk = userId)
+        if user.id != token.payload.get('user_id', ''):
+            return Response({"error":"Access denied", 'status':status.HTTP_403_FORBIDDEN})
+        
+        return Response()
+    def delete(self, request, userId, format = None):
+        try:
+            JWT_authenticator = JWTAuthentication()
+            data, token = JWT_authenticator.authenticate(request)
+            user = CustomeUser.objects.get(pk = userId)
+            if user.id != token.payload.get('user_id', ''):
+                return Response({'error':'Access denied', 'statusCode':status.HTTP_403_FORBIDDEN})
+            user.delete()
+            return Response({"message":"Your account has been deleted", 'statusCode':200})
+        except:
+            return Response({'error':"Access denied", 'statusCode':403})
+    def put(self, request, userId, format = None):
+        try:
+            JWT_authenticator = JWTAuthentication()
+            data, token = JWT_authenticator.authenticate(request)
+            user = CustomeUser.objects.get(pk = userId)
+            if user.id != token.payload.get('user_id', ''):
+                return Response({'error':'Access denied', 'statusCode':status.HTTP_403_FORBIDDEN})
+            serializer = UserSerializer(user, data = request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response({'error':'You can\'t update username or email.', 'statusCode':403})
+        
+        except:
+            return Response({'error':"Access denied" , 'statusCode':403})
+        
 class JobList(APIView, PageNumberPagination):
     permission_classes = (permissions.IsAuthenticated,)
     def get(self, request, format = None):
@@ -91,7 +124,7 @@ class JobDetail(APIView):
             serializer = JobSerializer(job)
             return Response(serializer.data)
         except:
-            return Response({'error':"Job not found", 'statusCode':st.HTTP_404_NOT_FOUND})
+            return Response({'error':"Job not found", 'statusCode':status.HTTP_404_NOT_FOUND})
         
     def delete(self, request, jobId, format = None):
         response, job = verify_token(jobId, request)
