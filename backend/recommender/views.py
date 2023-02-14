@@ -142,3 +142,10 @@ class SkillDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated, )
     serializer_class = SkillSerializer
     queryset = Skill.objects.all()
+class Search(APIView, PageNumberPagination):
+    def post(self, request, format = None):
+        item = request.data 
+        jobs = Job.objects.filter(title__unaccent_icontains = item)
+        jobs = self.paginate_queryset(jobs)
+        serializer = JobSerializer(jobs, many = True)
+        return self.get_paginated_response(serializer.data)

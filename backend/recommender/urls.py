@@ -19,5 +19,6 @@ urlpatterns = [
     path('api/v1/skill<int:pk>/', views.SkillDetailView.as_view()),
     path('', TemplateView.as_view(template_name="index.html")),
     path('logout', LogoutView.as_view()),
+    path('api/v1/search/', views.Search.as_view(), name = 'search'),
     
 ]
