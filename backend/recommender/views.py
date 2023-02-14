@@ -250,6 +250,4 @@ class Search(APIView, PageNumberPagination):
             data.append(dict(zip(columns, result)))
         connection.commit()
         connection.close()
-        return Response(data)
-        
-        
+        return Response(data)     
