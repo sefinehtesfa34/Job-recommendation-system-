@@ -37,17 +37,18 @@ def respond(response):
             'specialization':response.get('specialization', ''),
             'resume':response.get('resume', ''),
             'role':response.get('role', ''),
-            'about':response.get('about', '')
+            'about':response.get('about', ''),
+            'is_active':response.get('is_active', '')
             }
     return data 
 class UserList(APIView, PageNumberPagination):
-    def post(self, request, format = None):    
+    def post(self, request, format = None):
+        request.data['is_active'] = True     
         serializer = UserSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
-            data = respond(serializer.data)
-            return Response(data)
-            
+            data = serializer.data
+            return Response(respond(data))
         return Response({"error":serializer.errors, "statusCode":status.HTTP_400_BAD_REQUEST})
     
     def get(self, request, format = None):
@@ -56,7 +57,6 @@ class UserList(APIView, PageNumberPagination):
         serializer = UserSerializer(users, many = True)
         data = map(respond, serializer.data)
         return self.get_paginated_response(data)
-
     
 class UserDetail(APIView):
     permission_classes = (permissions.IsAuthenticated,)

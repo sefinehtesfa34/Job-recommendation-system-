@@ -13,7 +13,8 @@ class UserManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.is_active = True 
-        user.save(using = self._db)
+        user.is_superuser = True 
+        user.save()
         return user
     
     def create_superuser(self, email, password, **extra_fields):
@@ -33,7 +34,7 @@ class CustomeUser(AbstractUser):
     hiringManagerName = models.CharField(max_length = 120, blank = True)
     password = models.CharField(max_length = 120, blank = False, null = False)
     specialization = models.CharField(max_length = 100, blank=True, default='')
-    resume = models.FileField(blank=True)
+    resume = models.FileField(upload_to='./static/resumes', blank = True)
     residence = models.CharField(max_length = 100, blank = True)
     about = models.TextField(max_length = 1000, blank = True)
     timestamp = models.DateField(default= date.today())
@@ -41,8 +42,7 @@ class CustomeUser(AbstractUser):
     USERNAME_FIELD ='email'
     REQUIRED_FIELDS = ['password']
     objects = UserManager()
-    def __str__(self):
-        return self.email
+    
     
 class Job(models.Model):
     jobId = models.UUIDField(max_length = 120, default = uuid.uuid4 ,primary_key = True)
