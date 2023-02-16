@@ -16,11 +16,11 @@ const DrawerComponent = ({ openDrawer, setOpenDrawer }) => {
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
       >
-        <Stack
+        <Stack 
           sx={{
             padding: "10px",
             width: "200px",
-          }}
+          }} 
         >
           <Typography>Hello World</Typography>
         </Stack>
