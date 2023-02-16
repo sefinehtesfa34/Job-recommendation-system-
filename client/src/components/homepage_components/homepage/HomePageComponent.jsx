@@ -1,45 +1,74 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import Header from "./Header";
-import Search from "./Search";
-import HomeImage from "../../../assets/haile.png";
+import Search from "../../../components/Search.jsx";
+import HomeImage from "../../../assets/job2.png";
+import JobLogo from "../../../assets/jobfit-logo.png";
+import { useMediaQuery, useTheme, Stack } from "@mui/material";
 
 const HomePageComponent = () => {
+  const theme = useTheme();
+  const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   return (
     <Box
       sx={{
-        height: { sm: "fit-content", md: "fit-content", lg: "fit-content" },
+        height: "60vh",
         background: "#5b6a82",
         dispaly: "flex",
-        padding: "20px",
         flexDirection: "column",
         gap: "50px !important",
       }}
     >
       <Header />
-      <Box
-        style={{ height: "calc(100% - 100px) " }}
+      <Stack
+        style={{ height: "calc(100% - 100px)", padding: "20px" }}
         sx={{
-          border: "5px solid green",
           mt: "30px",
           p: "10px",
           color: "white",
           display: "flex",
+          justifyContent: "center",
+
           // justifyContent: { md: "column", lg: "row" },
           flexDirection: { xs: "column", md: "row" },
         }}
       >
         {/* get dream job section start */}
-        <Box sx={{ border: "2px solid white", flex: "1" }}>
-          <Typography>Get Your Dream Jobs logo Here</Typography>
-          <Search />
+        <Box
+          sx={{
+            flex: "1",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "30px",
+            margin: "auto",
+          }}
+        >
+          <Stack sx={{ gap: "30px" }}>
+            <Typography sx={{ fontSize: "50px" }}>
+              Get Your
+              <Typography sx={{ fontSize: "50px" }}>Dream Jobs</Typography>
+              <img
+                style={{ width: "50px", paddingTop: "10px" }}
+                src={JobLogo}
+                alt="job logo"
+              />
+              Here
+            </Typography>
+            <Search />
+          </Stack>
         </Box>
         {/* get dream job section end */}
 
-        <Box sx={{ border: "2px solid yellow", flex: "1" }}>
-          <img width="400px" alt="home image" src={HomeImage} />
-        </Box>
-      </Box>
+        {isMatch ? (
+          ""
+        ) : (
+          <Box sx={{ flex: "1" }}>
+            <img width="100%" height="100%" alt="home image" src={HomeImage} />
+          </Box>
+        )}
+      </Stack>
     </Box>
   );
 };
