@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Stack, Box, Divider, Typography } from "@mui/material";
-// import jobs from "../assets/dummyobs.js";
+import { Stack, Box, Typography } from "@mui/material";
 import JobCard from "./JobCard.js";
 
-import { useSelector } from "react-redux";
-import { GET_RECOMMENDED_JOBS } from "../../../constants/actionTypes.js";
 const JobsList = ({ selectedJob, setselectedJob }) => {
   const [recommendedJobs, setrecommendedJobs] = useState(null);
-  // const { loading, success, jobs } = useSelector((state) => state.jobs);
 
   useEffect(() => {
     if (localStorage.getItem("jobs")) {
-      setrecommendedJobs(JSON.parse(localStorage.getItem("jobs")));
+      const data = localStorage.getItem("jobs");
+      setrecommendedJobs(JSON.parse(data));
     }
     return () => {};
   }, [localStorage.getItem("jobs")]);
 
   return (
     <Box
+      className="jobslist-container"
       sx={{
         width: "50vw",
         height: {

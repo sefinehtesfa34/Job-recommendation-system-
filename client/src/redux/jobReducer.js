@@ -5,13 +5,11 @@ const initialState = {
   success: false,
   failed: false,
   message: "",
-  users: [],
+  jobs: [],
 };
 
 const jobReducer = (state = initialState, action) => {
   switch (action.type) {
-    // Fetch all conditions
-
     case types.GET_JOBS:
       return {
         ...state,
@@ -41,8 +39,8 @@ const jobReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         success: false,
+        message: action.payload,
       };
-    // Create user conditions
 
     default:
       return state;

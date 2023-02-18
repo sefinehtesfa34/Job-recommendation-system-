@@ -15,7 +15,6 @@ import Loading from "../../../components/Loading.js";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
-
 const SignUpPage = () => {
   const { role } = useParams();
   const navigate = useNavigate();

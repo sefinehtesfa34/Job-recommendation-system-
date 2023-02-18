@@ -31,8 +31,6 @@ const Search = () => {
           name="search"
           {...register("search", {})}
           error={Boolean(errors.search)}
-          helperText={errors.search && errors.search.message}
-          margin="normal"
           variant="outlined"
           id="outlined-basic search"
         />

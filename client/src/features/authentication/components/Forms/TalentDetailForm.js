@@ -35,28 +35,30 @@ const HelperText = ({ text }) => {
   );
 };
 
-const TalentDetailForm = ({ isSubmit, setIsSubmit }) => {
+const TalentDetailForm = () => {
   const navigate = useNavigate();
   const myRefname = useRef(null);
   const handleClick = () => {
     myRefname.current.click();
   };
 
-  const [resume, setResume] = useState(null);
   const { message, currentUser, success, loading } = useSelector(
     (state) => state.users
   );
+  const [resume, setResume] = useState(null);
+
   const dispatch = useDispatch();
   let user = JSON.parse(localStorage.getItem("loggedUser"));
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      username: user?.username,
+      username: currentUser?.username,
+      about: currentUser?.about,
+      specialization: currentUser?.specialization,
     },
   });
   const onSubmit = (data) => {
@@ -210,7 +212,7 @@ const TalentDetailForm = ({ isSubmit, setIsSubmit }) => {
             name="specialization"
             {...register("specialization", {})}
             error={Boolean(errors.specialization)}
-            value={register.specialization}
+            value={register?.specialization}
             helperText={errors.specialization && errors.specialization.message}
             fullWidth
             margin="normal"

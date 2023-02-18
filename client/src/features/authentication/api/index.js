@@ -54,64 +54,34 @@ export const getCurrentUser = async (user_id) => {
         Authorization: `Bearer ${localStorage.getItem("access")}`,
       },
     });
-    console.log("data: ", response.data);
     localStorage.setItem("loggedUser", JSON.stringify(response.data));
     return response.data;
   } catch (err) {
     throw err;
   }
-
-  // axios
-  //   .get(`${url}user/${user_id}/`, {
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: `Bearer ${localStorage.getItem("access")}`,
-  //     },
-  //   })
-  //   .then((response) => {
-  //     console.log("data: ", response.data);
-  //     localStorage.setItem("loggedUser", JSON.stringify(response.data));
-  //     return response.data;
-  //   })
-  //   .catch((err) => {
-  //     return err;
-  //   });
 };
 
 export const updateUser = async (user) => {
-  console.log("user: ", user);
-
-  fetch(`${url}user/${user.id}/`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("access")}`,
-    },
-    body: user.user,
-  })
-    .then((response) => {
-      return response.data;
-    })
-    .catch((err) => {
-      console.log("error: ", err);
-
-      return err;
+  try {
+    await fetch(`${url}user/${user.id}/`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+      body: user.user,
     });
-};
 
-export const getRecommendedJobs = async (id) => {
-  fetch(`${url}user/${id}/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("access")}`,
-    },
-  })
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((err) => {
-      return err;
+    const response = await axios.get(`${url}user/${user?.id}/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
     });
+    localStorage.setItem("loggedUser", JSON.stringify(response.data));
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const deleteUser = async (id) => {

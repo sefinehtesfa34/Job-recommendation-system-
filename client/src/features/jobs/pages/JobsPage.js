@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Stack, Box, Divider } from "@mui/material";
-import Header from "../../../components/homepage_components/homepage/Header.jsx";
+import Header from "../../../components/Header.jsx";
 import Search from "../../../components/Search";
 import JobsList from "../components/JobsList.js";
 import JobDetail from "../components/JobDetail.js";

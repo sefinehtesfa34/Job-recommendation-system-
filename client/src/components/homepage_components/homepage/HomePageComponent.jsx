@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, Button, Typography } from "@mui/material";
-import Header from "./Header";
+import { Box, Typography } from "@mui/material";
 import Search from "../../../components/Search.jsx";
 import HomeImage from "../../../assets/job2.png";
 import JobLogo from "../../../assets/jobfit-logo.png";
@@ -19,11 +18,9 @@ const HomePageComponent = () => {
         gap: "50px !important",
       }}
     >
-      <Header />
       <Stack
         style={{ height: "calc(100% - 100px)", padding: "20px" }}
         sx={{
-          mt: "30px",
           p: "10px",
           color: "white",
           display: "flex",
@@ -46,16 +43,19 @@ const HomePageComponent = () => {
           }}
         >
           <Stack sx={{ gap: "30px" }}>
-            <Typography sx={{ fontSize: "50px" }}>
-              Get Your
+            <Stack>
+              {" "}
+              <Typography sx={{ fontSize: "50px" }}>Get Your</Typography>
               <Typography sx={{ fontSize: "50px" }}>Dream Jobs</Typography>
-              <img
-                style={{ width: "50px", paddingTop: "10px" }}
-                src={JobLogo}
-                alt="job logo"
-              />
-              Here
-            </Typography>
+              <Stack flexDirection="row">
+                <img
+                  style={{ width: "50px", paddingTop: "10px", height: "50px" }}
+                  src={JobLogo}
+                  alt="job logo"
+                />
+                <Typography sx={{ fontSize: "50px" }}>Here</Typography>
+              </Stack>
+            </Stack>
             <Search />
           </Stack>
         </Box>

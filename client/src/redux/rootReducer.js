@@ -11,7 +11,6 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({ users, jobs });
-
 const reducers = persistReducer(persistConfig, rootReducer);
 
 export default reducers;
