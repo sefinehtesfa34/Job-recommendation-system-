@@ -94,9 +94,39 @@ const LogInPage = () => {
           flexDirection: "column",
         }}
       >
+<<<<<<< HEAD
         <Typography sx={{ textAlign: "center", fontSize: "25px", mb: "30px" }}>
           Login to Jobfit
         </Typography>
+=======
+        <Typography sx={{ textAlign: "center", fontSize: "25px", mb: "10px" }}>
+          Login to Jobfit
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: "15px",
+            fontWeight: "200",
+            color: "black",
+            opacity: "0.5",
+            m: "0px 0 30px",
+          }}
+        >
+          Are you new user?{" "}
+          <Typography
+            onClick={() => navigate("/signup/choice")}
+            sx={{
+              color: "#1e5f78",
+              opacity: "1 !important",
+              fontWeight: "bold",
+              cursor: "pointer",
+            }}
+            variant="span"
+          >
+            Sign Up
+          </Typography>
+        </Typography>
+
+>>>>>>> 5e5e7118d9e1ea786217bd424d897ff2c0ab5d40
         <LogInForm />
 
         <Divider

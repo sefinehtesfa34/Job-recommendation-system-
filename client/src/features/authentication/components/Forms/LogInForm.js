@@ -5,6 +5,7 @@ import {
   Stack,
   FormHelperText,
   InputAdornment,
+  Box,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -48,6 +49,11 @@ const LogInForm = () => {
     <Stack sx={{ width: { xs: "100%" } }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* email field start */}
+        {message ? (
+          <Box sx={{ color: "red", textAlign: "center" }}>{message}</Box>
+        ) : (
+          ""
+        )}
         <HelperText text="Email" />
         <TextField
           InputProps={{

@@ -6,6 +6,7 @@ import {
   CLEAN_UP,
   LOGIN_USER,
   GET_USER,
+  LOG_OUT,
 } from "../../../constants/actionTypes.js";
 
 export const getUsers = () => {
@@ -22,6 +23,10 @@ export const createUser = (user) => {
 
 export const loginUser = (user) => {
   return { type: LOGIN_USER, payload: user };
+};
+
+export const logOutUser = () => {
+  return { type: LOG_OUT };
 };
 
 export const getCurrentUser = (id) => {

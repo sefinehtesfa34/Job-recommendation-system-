@@ -2,16 +2,6 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import * as types from "../constants/actionTypes.js";
 import * as api from "../features/authentication/api/index.js";
 
-function* getUsers() {
-  try {
-    const users = yield call(api.getUsers);
-
-    yield put({ type: types.FETCH_USERS_SUCCESS, payload: users });
-  } catch (error) {
-    yield put({ type: types.FETCH_USERS_FAILED, message: error.message });
-  }
-}
-
 function* createUser({ payload }) {
   try {
     const user = yield call(api.createUser, payload);
@@ -51,7 +41,7 @@ function* updateUser({ payload }) {
     const user = yield call(api.updateUser, payload);
     yield put({ type: types.UPDATE_USER_SUCCESS, payload: user });
   } catch (error) {
-    yield put({ type: types.UPDATE_USER_FAILED, message: error.message });
+    yield put({ type: types.UPDATE_USER_FAILED, message: error });
   }
 }
 
@@ -71,7 +61,6 @@ function* userSaga() {
 
   yield takeEvery(types.UPDATE_USER, updateUser);
   yield takeEvery(types.DELETE_USER, deleteUser);
-  
 }
 
 export default userSaga;

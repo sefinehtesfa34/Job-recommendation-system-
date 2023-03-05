@@ -52,7 +52,6 @@ function SignUpTalentForm() {
   });
 
   const onSubmit = (data) => {
-    alert('hello')
     let formData = new FormData();
 
     if (resume) {

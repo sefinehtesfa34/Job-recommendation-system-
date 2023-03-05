@@ -1,14 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import { Box, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
-const Loading = ({ path }) => {
-  const navigate = useNavigate();
-
-  const { success } = useSelector((state) => state.users);
-
+const Loading = () => {
   return (
     <Box
       sx={{

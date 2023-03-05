@@ -10,10 +10,10 @@ import { FaFacebookF } from "react-icons/fa/index.js";
 import { BsGoogle } from "react-icons/bs/index.js";
 import { useNavigate, useParams } from "react-router-dom";
 import SignUpForm from "../components/Forms/SignUpForm.js";
-import { useSelector } from "react-redux";
 import { cleanUp } from "../actions/users";
 import Loading from "../../../components/Loading.js";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const SignUpPage = () => {
   const { role } = useParams();

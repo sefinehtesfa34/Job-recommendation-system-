@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 import { Stack, Box, Divider } from "@mui/material";
-import Header from "../../../components/homepage_components/homepage/Header.jsx";
-import Search from "../../../components/homepage_components/homepage/Search.jsx";
+import Header from "../../../components/Header.jsx";
+import Search from "../../../components/Search";
 import JobsList from "../components/JobsList.js";
 import JobDetail from "../components/JobDetail.js";
+
 const JobsPage = () => {
   const [selectedJob, setselectedJob] = useState(null);
   return (
-    <Stack>
+    <Stack sx={{ height: "100vh" }}>
       <Header />
-      <Stack sx={{ margin: "50px" }}>
+      <Stack
+        sx={{
+          margin: "50px",
+        }}
+      >
         <Box
           sx={{
-            width: { xs: "90%", sm: "80%", md: "70%", lg: "60%" },
             margin: "auto",
           }}
         >
@@ -21,15 +25,17 @@ const JobsPage = () => {
         <Divider />
         <Stack
           sx={{
-            flexDirection: "row",
+            flexDirection: { sm: "column", md: "row" },
             justifyContent: "space-between",
-            mt: "30px",
             gap: "30px",
             padding: "30px",
           }}
         >
           <JobsList selectedJob={selectedJob} setselectedJob={setselectedJob} />
-          <JobDetail  selectedJob={selectedJob} setselectedJob={setselectedJob}  />
+          <JobDetail
+            selectedJob={selectedJob}
+            setselectedJob={setselectedJob}
+          />
         </Stack>
       </Stack>
     </Stack>

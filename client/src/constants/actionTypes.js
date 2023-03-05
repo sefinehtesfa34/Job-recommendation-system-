@@ -1,7 +1,8 @@
 export const CREATE_USER = "CREATE_USER";
 export const LOGIN_USER = "LOGIN_USER";
+export const LOG_OUT = "LOG_OUT";
+
 export const GET_USER = "GET_USER";
-export const GET_RECOMMENDED_JOBS = "GET_RECOMMENDED_JOBS";
 
 export const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS";
 export const CREATE_USER_FAILED = "CREATE_USER_FAILED";
@@ -19,3 +20,9 @@ export const FETCH_USERS_SUCCESS = "FETCH_USERS_SUCCESS";
 export const FETCH_USERS_FAILED = "FETCH_USERS_FAILED";
 
 export const CLEAN_UP = "CLEAN_UP";
+
+export const GET_RECOMMENDED_JOBS = "GET_RECOMMENDED_JOBS";
+export const GET_JOBS = "GET_JOBS";
+export const SEARCH_JOBS = "SEARCH_JOBS";
+export const GET_JOB_SUCCESS = "GET_JOB_SUCCESS";
+export const GET_JOB_FAILED = "GET_JOB_FAILED";

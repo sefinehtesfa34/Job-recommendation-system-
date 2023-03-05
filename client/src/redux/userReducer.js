@@ -6,7 +6,6 @@ const initialState = {
   success: false,
   failed: false,
   message: "",
-  users: [],
 };
 
 const userReducer = (state = initialState, action) => {
@@ -17,6 +16,13 @@ const userReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         success: false,
+        message: "",
+      };
+
+    case types.LOG_OUT:
+      return {
+        ...state,
+        currentUser: null,
       };
 
     case types.FETCH_ALL_USER:
@@ -27,7 +33,7 @@ const userReducer = (state = initialState, action) => {
     case types.FETCH_USERS_SUCCESS:
       return {
         ...state,
-        users: action.payload,
+        currentUser: action.payload,
         loading: false,
         success: true,
       };
@@ -54,7 +60,6 @@ const userReducer = (state = initialState, action) => {
         loading: true,
       };
     case types.CREATE_USER_SUCCESS:
-      console.log("payload: ", action.payload);
       return {
         ...state,
         currentUser: action.payload,
@@ -79,9 +84,9 @@ const userReducer = (state = initialState, action) => {
     case types.UPDATE_USER_SUCCESS:
       return {
         ...state,
-        currentUser: action.payload,
         loading: false,
         success: true,
+        currentUser: action.payload,
       };
     case types.UPDATE_USER_FAILED:
       return {

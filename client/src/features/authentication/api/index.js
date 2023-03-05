@@ -2,11 +2,7 @@ import axios from "axios";
 import jwt from "jwt-decode";
 
 const url = "http://localhost:8000/api/v1/";
-const headers = {
-  "Content-Type": "application/json",
-  access: "97e0d315477f435489cf04904c9d0e6co",
-};
-// axios.get(url, {headers})
+// const url = "http://192.168.226.120:8000/api/v1/";
 
 export const getUsers = async () => {
   try {
@@ -32,64 +28,60 @@ export const createUser = async (user) => {
 };
 
 export const login = async (user) => {
-  const res = await axios.post(url + "token/access/", user);
-  const access = res.data.access;
-  localStorage.setItem("access", access);
-  const response = await jwt(access);
-  return response;
+  try {
+    const res = await axios.post(url + "token/access/", user);
+    const access = res?.data?.access;
+    localStorage.setItem("access", access);
+    const response = jwt(access);
+    return response;
+  } catch (err) {
+    if (
+      err?.response?.data?.detail ===
+      "No active account found with the given credentials"
+    ) {
+      throw "Invalid email or password!";
+    } else {
+      throw "Connection error!";
+    }
+  }
 };
 
 export const getCurrentUser = async (user_id) => {
-  axios
-    .get(`http://localhost:8000/api/v1/user/${user_id}/`, {
+  try {
+    const response = await axios.get(`${url}user/${user_id}/`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access")}`,
       },
-    })
-    .then((response) => {
-      localStorage.setItem("loggedUser", JSON.stringify(response.data));
-      return response.data;
-    })
-    .catch((err) => {
-      return err;
     });
+    localStorage.setItem("loggedUser", JSON.stringify(response.data));
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const updateUser = async (user) => {
-  console.log("user: ", user);
-
-  fetch(`http://localhost:8000/api/v1/user/${user.id}/`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("access")}`,
-    },
-    body: user.user,
-  })
-    .then((response) => {
-      return response.data;
-    })
-    .catch((err) => {
-      console.log("error: ", err);
-
-      return err;
+  try {
+    await fetch(`${url}user/${user.id}/`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+      body: user.user,
     });
-};
 
-export const getRecommendedJobs = async (id) => {
-  fetch(`http://localhost:8000/api/v1/user/${id}/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("access")}`,
-    },
-  })
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((err) => {
-      return err;
+    const response = await axios.get(`${url}user/${user?.id}/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
     });
+    localStorage.setItem("loggedUser", JSON.stringify(response.data));
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const deleteUser = async (id) => {

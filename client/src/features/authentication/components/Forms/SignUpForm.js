@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { TextField, Button, Stack, FormHelperText } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import { createUser } from "../../actions/users.js";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+
 import useStyles from "./Style.js";
 import { useParams } from "react-router-dom";
 import { CountryDropdown } from "react-country-region-selector";
@@ -114,8 +115,8 @@ const SignUpForm = () => {
           {...register("password", {
             required: "Password is required",
             minLength: {
-              value: 6,
-              message: "Password must be at least 8 characters",
+              value: 4,
+              message: "Password must be at least 4 characters",
             },
           })}
           error={Boolean(errors.password)}
