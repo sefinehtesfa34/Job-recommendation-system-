@@ -152,7 +152,6 @@ class RecommenderView(APIView, PageNumberPagination):
             return user 
         except CustomeUser.DoesNotExist:
             raise ValueError
-        
     def get(self, request, pk, format = None):
         try:
             user = self.get_object(pk)
@@ -198,9 +197,14 @@ class ProfileView(APIView, PageNumberPagination):
         try:
             user = TalentProfile.objects.get(pk = pk)
             user.delete()
-            return self.get_paginated_response({"error":"No content", "statusCode":status.HTTP_204_NO_CONTENT})
+            return self.get_paginated_response(
+                {"error":"No content", 
+                                                
+                "statusCode":status.HTTP_204_NO_CONTENT})
         except:
-            return self.get_paginated_response({"error":"Bad request", "statusCode":status.HTTP_400_BAD_REQUEST})
+            return self.get_paginated_response({
+                "error":"Bad request",                                    
+             "statusCode":status.HTTP_400_BAD_REQUEST})
         
         
     def get(self, request, pk, format = None):
@@ -209,7 +213,9 @@ class ProfileView(APIView, PageNumberPagination):
             serializer = TalentProfileSerializer(user)
             return self.get_paginated_response(serializer.data)
         except:
-            return self.get_paginated_response({"error":ValueError, "statusCode":status.HTTP_403_FORBIDDEN})
+            return self.get_paginated_response(
+                {"error":ValueError, 
+                 "statusCode":status.HTTP_403_FORBIDDEN})
 class SkillView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = SkillSerializer
