@@ -94,11 +94,6 @@ const LogInPage = () => {
           flexDirection: "column",
         }}
       >
-<<<<<<< HEAD
-        <Typography sx={{ textAlign: "center", fontSize: "25px", mb: "30px" }}>
-          Login to Jobfit
-        </Typography>
-=======
         <Typography sx={{ textAlign: "center", fontSize: "25px", mb: "10px" }}>
           Login to Jobfit
         </Typography>
@@ -126,7 +121,6 @@ const LogInPage = () => {
           </Typography>
         </Typography>
 
->>>>>>> 5e5e7118d9e1ea786217bd424d897ff2c0ab5d40
         <LogInForm />
 
         <Divider

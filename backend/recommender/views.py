@@ -1,6 +1,7 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import sqlite3
 from rest_framework.views import APIView
+from django.db.models import Count
 from rest_framework.response import Response
 from .serializers import UserSerializer 
 from rest_framework import status, generics
@@ -172,6 +173,10 @@ class RecommenderView(APIView, PageNumberPagination):
             sorted_indeces = np.argsort(similarity_probability)
             for index in sorted_indeces:
                 ordered_list.append(hashmap[index])
+            if not ordered_list:
+                jobs = Job.objects.annotate(Count('id'))[:10]
+                serializer = JobSerializer(jobs, many = True)
+                return Response(serializer.data)
             return self.get_paginated_response(ordered_list)
         except:
             return Response({"error":"Something went wrong!", "statusCode":status.HTTP_400_BAD_REQUEST})
